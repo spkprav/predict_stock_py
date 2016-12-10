@@ -9,6 +9,9 @@ from keras.models import Sequential
 from keras.layers import Dense
 from textblob import TextBlob
 
+# Setup
+
+
 
 # First we login into twitter
 consumer_key = 'hxYAbUapce865P5xF7TkE5qwG'
@@ -61,6 +64,7 @@ def stock_prediction():
 
     with open(FILE_NAME) as f:
         for n, line in enumerate(f):
+            pdb.set_trace()
             if n != 0:
                 dataset.append(float(line.split(',')[1]))
 
@@ -106,4 +110,4 @@ if not get_historical(stock_quote):
 print stock_prediction()
 
 # We are done so we delete the csv file
-# os.remove(FILE_NAME)
+os.remove(FILE_NAME)
