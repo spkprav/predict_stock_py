@@ -43,9 +43,15 @@ def stock_sentiment(quote, num_tweets):
 
 
 def get_historical(quote):
-    return True
-    # Google doesn't provides csv output for Indian Market, Use Yahoo
-    # http://real-chart.finance.yahoo.com/table.csv?s=CADILAHC.NS&d=11&e=10&f=2016&g=d&a=6&b=1&c=2002&ignore=.csv
+    url = 'http://real-chart.finance.yahoo.com/table.csv?s='+quote+'.NS&d=11&e=10&f=2016&g=d&a=6&b=1&c=2000&ignore=.csv'
+    r = requests.get(url, stream=True)
+
+    if r.status_code != 400:
+        with open(FILE_NAME, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)
+
+        return True
 
 
 def stock_prediction():
@@ -82,8 +88,8 @@ def stock_prediction():
 
 
 # Ask user for a stock quote
-# stock_quote = raw_input('Enter a stock quote from NSE (e.j: CADILAHC): ').upper()
-stock_quote = "CADILAHC"
+stock_quote = raw_input('Enter a stock quote from NSE (e.j: CADILAHC): ').upper()
+# stock_quote = "CADILAHC"
 
 # Check if the stock sentiment is positve
 # if not stock_sentiment(stock_quote, num_tweets=100):
