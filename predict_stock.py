@@ -42,16 +42,9 @@ def stock_sentiment(quote, num_tweets):
 
 
 def get_historical(quote):
-    # Download our file from google finance
-    url = 'http://www.google.com/finance/historical?q=NASDAQ%3A'+quote+'&output=csv'
-    r = requests.get(url, stream=True)
-
-    if r.status_code != 400:
-        with open(FILE_NAME, 'wb') as f:
-            for chunk in r:
-                f.write(chunk)
-
-        return True
+    return True
+    # Google doesn't provides csv output for Indian Market, Use Yahoo
+    # http://real-chart.finance.yahoo.com/table.csv?s=CADILAHC.NS&d=11&e=10&f=2016&g=d&a=6&b=1&c=2002&ignore=.csv
 
 
 def stock_prediction():
@@ -70,7 +63,7 @@ def stock_prediction():
     def create_dataset(dataset):
         dataX = [dataset[n+1] for n in range(len(dataset)-2)]
         return np.array(dataX), dataset[2:]
-        
+
     trainX, trainY = create_dataset(dataset)
 
     # Create and fit Multilinear Perceptron model
@@ -78,7 +71,7 @@ def stock_prediction():
     model.add(Dense(8, input_dim=1, activation='relu'))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, nb_epoch=200, batch_size=2, verbose=2)
+    model.fit(trainX, trainY, nb_epoch=400, batch_size=2, verbose=2)
 
     # Our prediction for tomorrow
     prediction = model.predict(np.array([dataset[0]]))
@@ -86,14 +79,14 @@ def stock_prediction():
 
     return result
 
-    
+
 # Ask user for a stock quote
-stock_quote = raw_input('Enter a stock quote from NASDAQ (e.j: AAPL, FB, GOOGL): ').upper()
+stock_quote = raw_input('Enter a stock quote from NSE (e.j: CADILAHC): ').upper()
 
 # Check if the stock sentiment is positve
-if not stock_sentiment(stock_quote, num_tweets=100):
-    print 'This stock has bad sentiment, please re-run the script'
-    sys.exit()
+# if not stock_sentiment(stock_quote, num_tweets=100):
+#     print 'This stock has bad sentiment, please re-run the script'
+#     sys.exit()
 
 # Check if we got te historical data
 if not get_historical(stock_quote):
@@ -105,4 +98,4 @@ if not get_historical(stock_quote):
 print stock_prediction()
 
 # We are done so we delete the csv file
-os.remove(FILE_NAME)
+# os.remove(FILE_NAME)
