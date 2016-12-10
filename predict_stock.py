@@ -1,5 +1,6 @@
 import os
 import sys
+import pdb
 import tweepy
 import requests
 import numpy as np
@@ -71,7 +72,7 @@ def stock_prediction():
     model.add(Dense(8, input_dim=1, activation='relu'))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, nb_epoch=400, batch_size=2, verbose=2)
+    model.fit(trainX, trainY, nb_epoch=200, batch_size=100, verbose=4)
 
     # Our prediction for tomorrow
     prediction = model.predict(np.array([dataset[0]]))
@@ -81,7 +82,8 @@ def stock_prediction():
 
 
 # Ask user for a stock quote
-stock_quote = raw_input('Enter a stock quote from NSE (e.j: CADILAHC): ').upper()
+# stock_quote = raw_input('Enter a stock quote from NSE (e.j: CADILAHC): ').upper()
+stock_quote = "CADILAHC"
 
 # Check if the stock sentiment is positve
 # if not stock_sentiment(stock_quote, num_tweets=100):
